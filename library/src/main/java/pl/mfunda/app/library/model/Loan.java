@@ -1,4 +1,4 @@
-package pl.mfunda.app.library;
+package pl.mfunda.app.library.model;
 
 public class Loan {
 	private int idBook;

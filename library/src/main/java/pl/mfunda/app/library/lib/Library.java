@@ -1,4 +1,6 @@
-package pl.mfunda.app.library;
+package pl.mfunda.app.library.lib;
+
+import pl.mfunda.app.library.model.Book;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,9 +10,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
+import pl.mfunda.app.library.model.Reader;
 
 public class Library {
-	public static final String DRIVER = "org.slite.JDBC";
+	public static final String DRIVER = "org.sqlite.JDBC";
 	public static final String DB_URL = "jdbc:sqlite:library.db";
 	
 	private Connection conn;
@@ -34,9 +37,9 @@ public class Library {
 	}
 	
 	public boolean createTables(){
-		String createReader = "CREATE TABLE IF NOT EXIST readers (id_readers INTEGER PRIMARY KEY AUTOINCREMENT, name varchar(255), surname varchar(255), pesel int)";
-		String createBook = "CREATE TABLE IF NOT EXIST books (id_book INTEGER PRIMARY KEY AUTOINCREMENT, title varchar(255), author varchar (255))";
-		String createLoan = "CREATE TABLE IF NOT EXIST loans (id_loan INTEGER PRIMARY KEY AUTOINCREMENT, id_reader int, id_book int)";
+		String createReader = "CREATE TABLE IF NOT EXISTS readers (id_reader INTEGER PRIMARY KEY AUTOINCREMENT, name varchar(255), surname varchar(255), pesel int)";
+        String createBook = "CREATE TABLE IF NOT EXISTS books (id_book INTEGER PRIMARY KEY AUTOINCREMENT, title varchar(255), author varchar(255))";
+        String createLoan = "CREATE TABLE IF NOT EXISTS loans (id_loan INTEGER PRIMARY KEY AUTOINCREMENT, id_reader int, id_book int)";
 		try{
 			stat.execute(createReader);
 			stat.execute(createBook);
@@ -67,7 +70,7 @@ public class Library {
 	
 	public boolean insertBook(String title, String author){
 		try{
-			PreparedStatement prepStmt = conn.prepareStatement("insert int books values (NULL, ?, ?);");
+			PreparedStatement prepStmt = conn.prepareStatement("insert into books values (NULL, ?, ?);");
 			prepStmt.setString(1, title);
 			prepStmt.setString(2, author);
 			prepStmt.execute();
@@ -80,7 +83,7 @@ public class Library {
 	
 	public boolean insertLoan(int idReader, int idBook){
 		try{
-			PreparedStatement prepStmt = conn.prepareStatement("insert int loans values (NULL, ?, ?);");
+			PreparedStatement prepStmt = conn.prepareStatement("insert into loans values (NULL, ?, ?);");
 			prepStmt.setInt(1, idReader);
 			prepStmt.setInt(2, idBook);
 			prepStmt.execute();
